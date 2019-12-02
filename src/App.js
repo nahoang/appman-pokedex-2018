@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
-import './App.css'
 import styled from 'styled-components'
 
-const COLORS = {
+import './App.css'
+import Card from './components/Card'
+
+export const COLORS = {
   Psychic: "#f8a5c2",
   Fighting: "#f0932b",
   Fairy: "#c44569",
@@ -20,6 +22,16 @@ const COLORS = {
 
 const Wrapper = styled.div`
   heigth: 100%
+`
+
+const Header = styled.div`
+  background-color: #ffffff;
+  p {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    z-index: 1;
+  }
 `
 
 const Footer = styled.div`
@@ -50,7 +62,23 @@ const StyledButton = styled.div`
   }
 `
 
+const ListItem = styled.div`
+  height: 590px;
+  overflow: scroll;
+  width: 100%;
+`
+
 class App extends Component {
+
+  state = {
+    cards: []
+  }
+
+  componentDidMount() {
+    fetch("http://localhost:3030/api/cards")
+      .then(res => res.json())
+      .then(data => this.setState({ cards: data.cards }));
+  }
 
   openModal() {
     
@@ -59,6 +87,18 @@ class App extends Component {
   render() {
     return (
       <Wrapper className="App">
+        <Header>
+          <p>My Pokedex</p>
+        </Header>
+        <ListItem>
+        {this.state.cards.map((item) => 
+          <Card 
+          data={item}
+          col={2}
+          key={item.id}
+        />
+        )}
+        </ListItem>
         <Footer>
           <StyledButton onClick={this.openModal.bind(this)}>
               <p>+</p>
