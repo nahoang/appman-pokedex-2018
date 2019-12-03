@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import './App.css'
 import Card from './components/Card'
+import Modal from './components/Modal'
 
 export const COLORS = {
   Psychic: "#f8a5c2",
@@ -68,10 +69,12 @@ const ListItem = styled.div`
   width: 100%;
 `
 
-class App extends Component {
 
+
+class App extends Component {
   state = {
-    cards: []
+    cards: [],
+    isOpen: false
   }
 
   componentDidMount() {
@@ -81,12 +84,17 @@ class App extends Component {
   }
 
   openModal() {
-    
+    this.setState({ isOpen: true })
   }
+
+  closeModal() {
+    this.setState({isOpen: false})
+  }
+
 
   render() {
     return (
-      <Wrapper className="App">
+      <Wrapper className="App" >
         <Header>
           <p>My Pokedex</p>
         </Header>
@@ -104,6 +112,12 @@ class App extends Component {
               <p>+</p>
           </StyledButton>
         </Footer>
+        <div  >
+        {
+          this.state.isOpen && <Modal  data={this.state.cards}  onClose={() => this.closeModal() } />
+        }
+        </div>
+        
       </Wrapper>
     )
   }

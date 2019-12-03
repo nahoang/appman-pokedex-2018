@@ -27,11 +27,19 @@ const StyledInformation = styled.div`
   
 `
 
+const Wrapper = styled.div`
+  width: 1024px;
+  background-color: #f3f4f7;
+`
+
 const CardWrapper = styled.div`
   position: relative;
-  background-color: #f3f4f7;
+  
   padding: 8px;
   height: 220px;
+  &.col-1 {
+    width: 65%;
+  }
   &.col-2 {
     width: 45%;
   }
@@ -143,7 +151,8 @@ class Card extends Component {
     // const happy = this.calculateHappyness(hp,  damage, weekness)
 
     return (
-      <CardWrapper className={`col-${col}`}>
+      <Wrapper>
+        <CardWrapper className={`col-${col}`}>
           <StyledImage>
               <img src={data.imageUrl} alt={data.name} />
           </StyledImage> 
@@ -168,6 +177,8 @@ class Card extends Component {
             </StyledRow> */}
         </StyledInformation>
       </CardWrapper>
+      </Wrapper>
+      
     );
   }
 }
