@@ -173,6 +173,7 @@ class Card extends Component {
     );
     // const damage = this.calculateDamage(iAttacks[0].damage)
     // const happy = this.calculateHappyness(hp,  damage, weekness)
+    const happy = 3 //hard code the value 
 
     return (
       <Wrapper>
@@ -195,11 +196,11 @@ class Card extends Component {
                 <StyledLabel>Weak</StyledLabel>
                 <ProgressBar value={weekness} />
               </StyledRow>
-              {/* <StyledRow>
+              <StyledRow>
             {[...Array(happy).keys()].map(item => {
               return <Icon  key={item} src={CuteImage}  alt="" />
             })}
-            </StyledRow> */}
+            </StyledRow>
             </StyledInformation>
             { clicked ? (
               <StyledButton className="action" onClick={this.props.onRemove}>

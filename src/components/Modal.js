@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import styled from 'styled-components'
+import _ from 'lodash'
 
 import Card from './Card'
-import { throwStatement } from "@babel/types";
-
+import SearchIcon from '../search.png'
 
 
 const OverLay = styled.div`
@@ -24,8 +24,27 @@ const Contianer = styled.div`
 `
 
 const SeachBar = styled.div`
-  height: 15%;
+  position: relative;
+`
 
+const StyledInput = styled.input`
+height: 35px;
+width: 98%;
+margin-bottom: 10px;
+font-size: 20px;
+padding-left: 10px;
+`
+
+const StyledIcon = styled.div`
+  height: 40px;
+  width: 40px;
+  img{
+    width: 100%;
+    height: 100%;
+  }
+  position: absolute
+  top: 0;
+  right: 10px;
 `
 
 const CardWrapper = styled.div`
@@ -72,14 +91,35 @@ class Modal extends Component {
     this.setState({cards: newCards})
   }
 
-
+  /**
+   * The search function should be queried from the server but it is temporatily hard code the data 
+   * @param {*} e 
+   */
+  searchPokemon(e) {
+    const upperName = e.target.value
+    if(_.isEmpty(upperName)) {
+      fetch("http://localhost:3030/api/cards")
+      .then(res => res.json())
+      .then(data => this.setState({ cards: data.cards }));
+    } else {
+      fetch("http://localhost:3030/api/cards")
+      .then(res => res.json())
+      .then(data => {
+        const newCards = data.cards.filter((val, i) => (val.name.indexOf(upperName) > 0))
+        this.setState({ cards: newCards });
+      })
+    }
+  }
 
   render() {
     return (
       <OverLay onClick={(e) => this.closeModal(e)} ref={this.modalRef}>
         <Contianer>
-          <SeachBar>
-            <input />
+          <SeachBar >
+            <StyledInput placeholder="Find Pokemon" onChange={(e) => this.searchPokemon(e)}/>
+          <StyledIcon>
+            <img src={SearchIcon} alt='' />
+          </StyledIcon>
           </SeachBar>
           <CardWrapper>
           {
