@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import _ from 'lodash'
 
 import './App.css'
 import Card from './components/Card'
@@ -73,14 +74,15 @@ const ListItem = styled.div`
 
 class App extends Component {
   state = {
-    cards: [],
-    isOpen: false
+    isOpen: true,
+    cards: []
   }
 
   componentDidMount() {
-    fetch("http://localhost:3030/api/cards")
-      .then(res => res.json())
-      .then(data => this.setState({ cards: data.cards }));
+    const poke = localStorage.getItem("pokemon")
+    if(poke !== null) {
+      this.setState({ cards: JSON.parse(poke)})
+    }
   }
 
   openModal() {
@@ -88,9 +90,19 @@ class App extends Component {
   }
 
   closeModal() {
-    this.setState({isOpen: false})
+    const poke = localStorage.getItem("pokemon")
+    const newCards = poke !== null ? JSON.parse(poke) : []
+    this.setState({isOpen: false, cards: newCards})
   }
 
+  removePokemon(id) {
+    let arr = localStorage.getItem("pokemon")
+    if(arr !== null) {
+      const newCards = JSON.parse(arr).filter((val, i) => (val.id !== id))
+      localStorage.setItem("pokemon", JSON.stringify(newCards))
+      this.setState({cards: newCards})
+    }
+  }
 
   render() {
     return (
@@ -104,6 +116,8 @@ class App extends Component {
           data={item}
           col={2}
           key={item.id}
+          clicked={true}
+          onRemove={this.removePokemon.bind(this, item.id)}
         />
         )}
         </ListItem>
@@ -112,9 +126,9 @@ class App extends Component {
               <p>+</p>
           </StyledButton>
         </Footer>
-        <div  >
+        <div>
         {
-          this.state.isOpen && <Modal  data={this.state.cards}  onClose={() => this.closeModal() } />
+          this.state.isOpen && <Modal   onClose={() => this.closeModal() } />
         }
         </div>
         

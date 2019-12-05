@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import styled from 'styled-components'
 
 import Card from './Card'
+import { throwStatement } from "@babel/types";
 
 
 
@@ -37,8 +38,17 @@ class Modal extends Component {
 
   constructor(props) {
     super(props);
-    // create a ref to store the textInput DOM element
+
+    this.state = {
+      cards: []
+    }
     this.modalRef = React.createRef();
+  }
+
+  componentDidMount() {
+    fetch("http://localhost:3030/api/cards")
+      .then(res => res.json())
+      .then(data => this.setState({ cards: data.cards }));
   }
 
   closeModal(e) {
@@ -46,6 +56,23 @@ class Modal extends Component {
       this.props.onClose()
     }
   }
+
+  addPokemon(item) {
+    let arr = localStorage.getItem("pokemon")
+    if(arr !== null) {
+      const poke = JSON.parse(arr)
+      poke.push(item)
+      localStorage.setItem("pokemon", JSON.stringify(poke))
+    } else {
+      arr = []
+      arr.push(item)
+      localStorage.setItem("pokemon", JSON.stringify(arr))
+    }
+    const newCards = this.state.cards.filter((val, i) => (val.id !== item.id))
+    this.setState({cards: newCards})
+  }
+
+
 
   render() {
     return (
@@ -56,11 +83,12 @@ class Modal extends Component {
           </SeachBar>
           <CardWrapper>
           {
-            this.props.data.map((item) => 
+            this.state.cards.map((item) => 
               <Card 
                 data={item}
                 col={1}
                 key={item.id}
+                onAdd={this.addPokemon.bind(this, item)}
             />
             )
           }
