@@ -67,6 +67,7 @@ const StyledButton = styled.div`
 const ListItem = styled.div`
   height: 590px;
   overflow: scroll;
+  overflow-x: hidden;
   width: 100%;
 `
 
@@ -74,7 +75,7 @@ const ListItem = styled.div`
 
 class App extends Component {
   state = {
-    isOpen: true,
+    isOpen: false,
     cards: []
   }
 

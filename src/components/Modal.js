@@ -49,8 +49,9 @@ const StyledIcon = styled.div`
 
 const CardWrapper = styled.div`
   overflow: scroll;
+  overflow-x: hidden;
   width: 100%;
-  height: 85%;
+  height: 630px;
 `
 
 class Modal extends Component {
